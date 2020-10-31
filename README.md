@@ -1,1 +1,1 @@
-clone
+Basic setup of a NodeJS project with javascript, ESLint and Prettier for code standardization and formatting, Mocha for tests and postgres as a test bank, and MikroOrm as ORM using the Postgres database.
