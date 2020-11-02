@@ -1,58 +1,14 @@
 import { User } from "../entities/user.entities";
-import { Mycontext } from "backend/types";
-import { Resolver, Query, Ctx, Mutation, InputType, Field, Arg, ObjectType } from "type-graphql";
+import { Mycontext } from "../types";
+import { Resolver, Query, Ctx, Mutation, Arg, } from "type-graphql";
+import { login } from '../types/login.type';
+import { EmailPasswordInput } from '../types/emailpaswordinput';
+import { UserResponse } from '../types/userresponse.type';
 import argon2 from 'argon2';
-
-@InputType()
-class login{
-  @Field()
-  email: string;
-
-  @Field()
-  password: string;
-}
-@InputType()
-class EmailPasswordInput {
- 
-  @Field()
-  name: string;
-
-  @Field()
-  lastName: string;
-
-  @Field()
-  resumeProfile: string;
-
-  @Field()
-  photoProfile: string;
-
-  @Field()
-  email: string;
-
-  @Field()
-  password: string;
-}
-
-@ObjectType()
-class FieldError{
-  @Field()
-  field: string;
-
-  @Field()
-  message: string;
-}
-@ObjectType()
-class UserResponse {
-  @Field(() => [FieldError], {nullable: true})
-  errors?: FieldError[]
-
-  @Field(() => User, {nullable: true})
-  user?: User
-}
 @Resolver()
 export class UserResolver{
   @Query(() => [User])
-  users(@Ctx() {em}: Mycontext): Promise<User[]> {
+  users(@Ctx() {em}: Mycontext): Promise<User[] | null> {
     return em.find(User, {})
   }
 
@@ -71,10 +27,11 @@ export class UserResolver{
       photoProfile: options.photoProfile
     })
     await em.persistAndFlush(user)
-
-    req.session.userId = user.id;
     
-    return user
+    req.session.userId = user.id;
+    console.log(req.session.userId);
+    
+    return { user }
   }
   
   @Mutation(() => UserResponse)
@@ -106,7 +63,8 @@ export class UserResolver{
       };
     }
   
-    req.session.userId = user.email;
+    req.session.userId = user.id;
+    console.log(req.session.userId)
 
     return {
       user,
