@@ -10,12 +10,6 @@ export class EmailPasswordInput {
   lastName: string;
 
   @Field()
-  resumeProfile: string;
-
-  @Field()
-  photoProfile: string;
-
-  @Field()
   email: string;
 
   @Field()

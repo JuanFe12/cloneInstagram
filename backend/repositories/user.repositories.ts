@@ -1,12 +1,12 @@
-//import { User } from "../entities/user.entities";
-//import argon2 from 'argon2';
+import { Mycontext } from './../types';
+import { login } from './../types/login.type';
+import { User } from "./../entities/user.entities";
 
-/*const  createUserRepository = async (
-    inputUser:  User
-) => {
-    //const hashedpassword = await argon2.hash(inputUser.password)
-    const user = em.create(User, {
-      ...inputUser
-    })
-    await em.persistAndFlush(user)
-}*/
+export const loginRepository = async ({em}: Mycontext) =>{
+  const user = await em.findOne(User,
+      { email: typeof login }
+     );
+
+     
+  return user
+}

@@ -1,3 +1,6 @@
+//import { passwordVerify } from './../middlewares/passwordVerify';
+//import { loginRepository } from './../repositories/user.repositories';
+//import { findUser } from './../validations/findUser.validation';
 import { User } from "../entities/user.entities";
 import { Mycontext } from "../types";
 import { Resolver, Query, Ctx, Mutation, Arg, } from "type-graphql";
@@ -22,9 +25,7 @@ export class UserResolver{
       email: options.email, 
       password: hashedpassword, 
       name: options.name,
-      lastName: options.lastName,
-      resumeProfile: options.resumeProfile,
-      photoProfile: options.photoProfile
+      lastName: options.lastName
     })
     await em.persistAndFlush(user)
     
@@ -39,8 +40,8 @@ export class UserResolver{
     @Arg('options') options: login,
     @Ctx() {em, req}:Mycontext
   ): Promise<UserResponse> {
-    const user = await em.findOne(User, { email: options.email } 
-    );
+    //loginRepository
+    const user = await em.findOne(User, { email: options.email });
     if (!user) {
       return {
         errors: [
@@ -62,7 +63,6 @@ export class UserResolver{
         ],
       };
     }
-  
     req.session.userId = user.id;
     console.log(req.session.userId)
 
